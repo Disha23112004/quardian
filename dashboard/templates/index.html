@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quardian</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #1a1d24;
+    --border: #2a2d35;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --accent: #7c6af7;
+    --accent2: #4fc3f7;
+    --danger: #f87171;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .logo span { color: var(--accent2); }
+
+  .tagline {
+    color: var(--muted);
+    font-size: 12px;
+    font-family: var(--mono);
+  }
+
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    margin-left: auto;
+    box-shadow: 0 0 6px var(--success);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  main { padding: 32px 40px; max-width: 1200px; }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+  }
+
+  .card-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .card-value {
+    font-family: var(--mono);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .card-value.danger { color: var(--danger); }
+  .card-value.success { color: var(--success); }
+  .card-value.accent { color: var(--accent); }
+
+  .section-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .model-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .model-name {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .model-name.quantum { color: var(--accent); }
+  .model-name.classical { color: var(--accent2); }
+
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 13px;
+  }
+
+  .metric-key { color: var(--muted); }
+  .metric-val { font-family: var(--mono); font-weight: 500; }
+
+  .bar-wrap {
+    background: var(--surface2);
+    border-radius: 2px;
+    height: 4px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+  }
+
+  .bar-fill {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--accent);
+    transition: width 1s ease;
+  }
+
+  .bar-fill.classical { background: var(--accent2); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  th {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: var(--mono);
+  }
+
+  .badge.anomaly { background: rgba(248,113,113,0.15); color: var(--danger); }
+  .badge.normal { background: rgba(52,211,153,0.12); color: var(--success); }
+
+  .score-bar-cell { min-width: 120px; }
+
+  .score-bar-bg {
+    background: var(--surface2);
+    border-radius: 2px;
+    height: 6px;
+    position: relative;
+  }
+
+  .score-bar-fg {
+    position: absolute;
+    left: 0; top: 0;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+
+  .score-bar-fg.high { background: var(--danger); }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .empty-state code {
+    display: block;
+    margin-top: 12px;
+    background: var(--surface2);
+    padding: 8px 16px;
+    border-radius: 4px;
+    color: var(--accent);
+    font-size: 13px;
+    display: inline-block;
+  }
+
+  .loading { color: var(--muted); font-family: var(--mono); font-size: 13px; padding: 20px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">QUAR<span>DIAN</span></div>
+    <div class="tagline">quantum-assisted metadata anomaly detector · local only</div>
+  </div>
+  <div class="status-dot" id="statusDot" title="Running"></div>
+</header>
+
+<main>
+  <div id="content">
+    <div class="loading">Loading results...</div>
+  </div>
+</main>
+
+<script>
+async function load() {
+  const content = document.getElementById('content');
+  
+  const [resultsRes, windowsRes] = await Promise.allSettled([
+    fetch('/api/results'),
+    fetch('/api/windows')
+  ]);
+
+  const results = resultsRes.status === 'fulfilled' && resultsRes.value.ok
+    ? await resultsRes.value.json() : null;
+  const windows = windowsRes.status === 'fulfilled' && windowsRes.value.ok
+    ? await windowsRes.value.json() : null;
+
+  if (!results) {
+    content.innerHTML = `
+      <div class="empty-state">
+        No results found. Run the pipeline first:<br>
+        <code>python main.py --mode demo</code>
+      </div>`;
+    return;
+  }
+
+  const n_windows = windows ? windows.length : 0;
+  const n_anomalies = windows ? windows.filter(w => w.is_anomaly).length : 0;
+  const qvqc = results.quantum_vqc || {};
+  const iforest = results.isolation_forest || {};
+  const lof = results.lof || {};
+
+  const bestMetric = m => {
+    const q = qvqc[m] || 0, c = Math.max(iforest[m] || 0, lof[m] || 0);
+    if (q > c) return `<span style="color:var(--accent)">${q}</span>`;
+    return `${q}`;
+  };
+
+  content.innerHTML = `
+    <div class="grid-3" style="margin-bottom:32px">
+      <div class="card">
+        <div class="card-label">Windows Scanned</div>
+        <div class="card-value accent">${n_windows}</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Anomalies Detected</div>
+        <div class="card-value ${n_anomalies > 0 ? 'danger' : 'success'}">${n_anomalies}</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Quantum ROC-AUC</div>
+        <div class="card-value accent">${qvqc.roc_auc || '—'}</div>
+      </div>
+    </div>
+
+    <div class="section-title">Model Comparison — Quantum vs Classical</div>
+    <div class="comparison-grid" style="margin-bottom:32px">
+      ${modelCard('Quantum VQC', qvqc, 'quantum')}
+      ${modelCard('Isolation Forest', iforest, 'classical')}
+      ${modelCard('Local Outlier Factor', lof, 'classical')}
+    </div>
+
+    <div class="section-title">Detection Windows</div>
+    ${windowsTable(windows)}
+  `;
+}
+
+function modelCard(name, m, type) {
+  const metrics = [
+    ['ROC-AUC', 'roc_auc'],
+    ['Avg Precision', 'avg_precision'],
+    ['Precision', 'precision'],
+    ['Recall', 'recall'],
+    ['F1', 'f1'],
+  ];
+  const rows = metrics.map(([label, key]) => {
+    const val = m[key] !== undefined ? m[key] : '—';
+    const pct = typeof val === 'number' ? val * 100 : 0;
+    return `
+      <div class="metric-row">
+        <span class="metric-key">${label}</span>
+        <span class="metric-val">${val}</span>
+      </div>
+      <div class="bar-wrap">
+        <div class="bar-fill ${type === 'classical' ? 'classical' : ''}" style="width:${pct}%"></div>
+      </div>`;
+  }).join('');
+  return `
+    <div class="model-card">
+      <div class="model-name ${type}">${name}</div>
+      ${rows}
+    </div>`;
+}
+
+function windowsTable(windows) {
+  if (!windows || windows.length === 0) {
+    return '<div style="color:var(--muted);font-family:var(--mono);font-size:13px">No window data available.</div>';
+  }
+  const rows = windows.map(w => {
+    const score = w.anomaly_score || 0;
+    const pct = Math.round(score * 100);
+    const high = score > 0.65;
+    return `
+      <tr>
+        <td>${w.window_start || '—'}</td>
+        <td>${w.window_end || '—'}</td>
+        <td>${w.email_count || '—'}</td>
+        <td class="score-bar-cell">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="score-bar-bg" style="flex:1">
+              <div class="score-bar-fg ${high ? 'high' : ''}" style="width:${pct}%"></div>
+            </div>
+            <span style="color:${high ? 'var(--danger)' : 'var(--muted)'}; font-size:11px">${score}</span>
+          </div>
+        </td>
+        <td><span class="badge ${w.is_anomaly ? 'anomaly' : 'normal'}">${w.is_anomaly ? w.anomaly_type || 'anomaly' : 'normal'}</span></td>
+        <td style="color:var(--muted);font-size:11px;max-width:280px">${w.description || ''}</td>
+      </tr>`;
+  }).join('');
+  return `
+    <div class="card" style="padding:0;overflow:hidden">
+    <table>
+      <thead>
+        <tr>
+          <th>Window Start</th><th>Window End</th><th>Emails</th>
+          <th>Anomaly Score</th><th>Status</th><th>Description</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    </div>`;
+}
+
+load();
+</script>
+</body>
+</html>

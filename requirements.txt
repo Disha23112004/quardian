@@ -1,0 +1,11 @@
+pennylane==0.38.0
+pennylane-lightning==0.38.0
+numpy==1.26.4
+scipy==1.13.0
+scikit-learn==1.4.2
+pandas==2.2.2
+flask==3.0.3
+matplotlib==3.9.0
+networkx==3.3
+tqdm==4.66.4
+python-dotenv==1.0.1

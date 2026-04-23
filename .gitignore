@@ -1,0 +1,19 @@
+# Personal data — never commit
+data/
+*.csv
+*.npy
+*.json
+
+# Environment
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Credentials
+.env
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
