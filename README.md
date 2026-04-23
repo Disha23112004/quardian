@@ -116,4 +116,4 @@ Existing VQC anomaly detection research focuses on enterprise network intrusion 
 
 Disha Parasu — B.Tech CSE (AI & ML), VIT Chennai
 
-github.com/Disha23112004 | linkedin.com/in/disha-parasu-746b18286
+github.com/Disha23112004 | linkedin.com/in/disha-parasu
